@@ -6,7 +6,7 @@ chrome.storage.local.get(['enabled'], (result) => {
     // --- YOUTUBE AGGRESSIVE AD-BLOCKING ---
     if (hostname.includes("youtube.com")) {
         const link = document.createElement("link");
-        link.href = chrome.runtime.getURL("youtube-clean.css");
+        link.href = chrome.runtime.getURL("src/css/youtube-clean.css");
         link.type = "text/css";
         link.rel = "stylesheet";
         document.documentElement.appendChild(link);
@@ -46,7 +46,7 @@ chrome.storage.local.get(['enabled'], (result) => {
                 </div>`;
             document.body.appendChild(overlay);
 
-            document.getElementById('m-close').onclick = () => window.location.href = "https://www.google.com";
+            document.getElementById('m-close').onclick = () => window.location.href = "https://www.vecteezy.com/free-png/cat";
             document.getElementById('m-go').onclick = () => overlay.remove();
         }
     }
