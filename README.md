@@ -1,4 +1,4 @@
-# Mindful 🌿
+# MindfulCloud 🌿
 
 **Mindful** is a lightweight, privacy-focused Firefox extension (Manifest V3) designed to help you reclaim your focus and eliminate distractions. It combines an aggressive ad-blocker with a "mindful pause" intervention to break the habit of mindless scrolling.
 
