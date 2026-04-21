@@ -1,0 +1,65 @@
+{
+  "manifest_version": 3,
+  "name": "Mindful",
+  "version": "1.7",
+  "description": "Reclaim your focus. Pause before scrolling and block distracting ads.",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "declarativeNetRequestWithHostAccess",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.tiktok.com/*",
+    "*://*.instagram.com/*",
+    "*://*.googleads.g.doubleclick.net/*",
+    "*://*.googlesyndication.com/*",
+    "*://*.doubleclick.net/*"
+  ],
+  "icons": {
+    "48": "icon.png",
+    "96": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Mindful Dashboard"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.tiktok.com/*",
+        "*://*.instagram.com/*",
+        "*://*.youtube.com/*"
+      ],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["youtube-clean.css"],
+      "matches": ["*://*.youtube.com/*"]
+    }
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "mindful-new-v2@yourextension.com"
+    }
+  }
+}
