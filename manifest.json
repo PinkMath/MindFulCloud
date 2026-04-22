@@ -1,62 +1,42 @@
 {
   "manifest_version": 3,
   "name": "MindfulCloud",
-  "version": "2.2",
-  "description": "Reclaim your focus. Pause before scrolling and block distracting ads.",
-  "permissions": [
-    "declarativeNetRequest",
-    "declarativeNetRequestFeedback",
-    "activeTab",
-    "scripting",
-    "storage"
-  ],
+  "version": "3.1",
+  "description": "Minimal focus-based UI theme.",
+  "permissions": ["storage"],
   "host_permissions": [
     "*://*.youtube.com/*",
-    "*://*.tiktok.com/*",
-    "*://*.instagram.com/*",
-    "*://*.googleads.g.doubleclick.net/*",
-    "*://*.googlesyndication.com/*",
-    "*://*.doubleclick.net/*"
+    "*://*.pinterest.com/*"
   ],
-  "icons": {
-    "16": "src/icon/16.jpg",
-    "32": "src/icon/32.jpg",
-    "48": "src/icon/48.jpg",
-    "128": "src/icon/128.jpg"
-  },
   "action": {
-    "default_icon": "src/icon/128.jpg",
-    "default_popup": "src/html/popup.html",
-    "default_title": "Mindful Dashboard"
+    "default_icon": {
+      "16": "icon/16.png",
+      "32": "icon/32.png"
+    },
+    "default_popup": "popup.html"
   },
-  "background": {
-    "scripts": ["background.js"]
+  "icons": {
+    "16": "icon/16.png",
+    "32": "icon/32.png",
+    "48": "icon/48.png",
+    "128": "icon/128.png"
   },
   "content_scripts": [
     {
       "matches": [
-        "*://*.tiktok.com/*",
-        "*://*.instagram.com/*",
-        "*://*.youtube.com/*"
+        "*://*.youtube.com/*",
+        "*://*.pinterest.com/*"
       ],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/css/youtube-clean.css"],
+      "resources": ["assets/youtube-clean.css"],
       "matches": ["*://*.youtube.com/*"]
     }
   ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "ruleset_1",
-        "enabled": true,
-        "path": "rules.json"
-      }
-    ]
-  },
   "browser_specific_settings": {
     "gecko": {
       "id": "mindful-new-v2@yourextension.com",
@@ -66,5 +46,5 @@
         "optional": []
       }
     }
-  }
+  } 
 }
