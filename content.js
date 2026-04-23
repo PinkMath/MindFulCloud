@@ -1,69 +1,126 @@
-// ======================
-// CSS INJECTION
-// ======================
-let styleEl = null;
+const html = document.documentElement;
 
-const injectCSS = () => {
-    if (styleEl) return;
+/* =========================
+   STATE CACHE (PREVENT FLICKER)
+========================= */
+let lastSettings = {};
+let lastProgressColor = null;
+let lastScrubberColor = null;
 
-    fetch(chrome.runtime.getURL("assets/youtube-clean.css"))
-        .then(res => res.text())
-        .then(css => {
-            styleEl = document.createElement("style");
-            styleEl.textContent = css;
-            document.head.appendChild(styleEl);
-        });
-};
+/* =========================
+   APPLY SETTINGS
+========================= */
+function applySettings(settings = {}) {
+  lastSettings = settings;
 
-const removeCSS = () => {
-    if (styleEl) {
-        styleEl.remove();
-        styleEl = null;
-    }
-};
+  // reset only extension-related classes (NOT full reset)
+  html.classList.remove(
+    "mindful-youtube",
+    "mindful-pinterest",
+    "mindful-reddit",
+    "mindful-twitter",
+    "yt-hide-rec",
+    "yt-hide-comments",
+    "pt-dark",
+    "rd-minimal",
+    "tw-focus"
+  );
 
-// ======================
-// APPLY SETTINGS
-// ======================
-const apply = () => {
-    chrome.storage.local.get(
-        ["enabled", "hideRecommendations", "hideComments"],
-        (res) => {
+  if (!settings.enabled) return;
 
-            const html = document.documentElement;
+  const host = location.hostname;
 
-            // MASTER SWITCH
-            if (res.enabled === false) {
-                removeCSS();
-                html.classList.remove("mindful-hide-rec");
-                html.classList.remove("mindful-hide-comments");
-                return;
-            }
+  /* =========================
+     YOUTUBE
+  ========================= */
+  if (host.includes("youtube.com")) {
+    html.classList.add("mindful-youtube");
 
-            // ENABLE CSS
-            injectCSS();
+    if (settings.ytHideRec) html.classList.add("yt-hide-rec");
+    if (settings.ytHideComments) html.classList.add("yt-hide-comments");
 
-            // TOGGLES
-            html.classList.toggle(
-                "mindful-hide-rec",
-                res.hideRecommendations === true
-            );
+    applyYouTubeColors(settings);
+  }
 
-            html.classList.toggle(
-                "mindful-hide-comments",
-                res.hideComments === true
-            );
-        }
-    );
-};
+  /* =========================
+     PINTEREST
+  ========================= */
+  if (host.includes("pinterest.com")) {
+    html.classList.add("mindful-pinterest");
+    if (settings.ptDark) html.classList.add("pt-dark");
+  }
 
-// ======================
-// LISTENERS
-// ======================
-chrome.storage.onChanged.addListener(apply);
-window.addEventListener("yt-navigate-finish", apply);
+  /* =========================
+     REDDIT
+  ========================= */
+  if (host.includes("reddit.com")) {
+    html.classList.add("mindful-reddit");
+    if (settings.rdMinimal) html.classList.add("rd-minimal");
+  }
 
-// ======================
-// INIT
-// ======================
-apply();
+  /* =========================
+     TWITTER / X
+  ========================= */
+  if (host.includes("twitter.com") || host.includes("x.com")) {
+    html.classList.add("mindful-twitter");
+    if (settings.twFocus) html.classList.add("tw-focus");
+  }
+}
+
+/* =========================
+   YOUTUBE COLORS (NO FLICKER)
+========================= */
+function applyYouTubeColors(settings = {}) {
+  const progress = settings.ytProgressColor || "#4cafef";
+  const scrubber = settings.ytScrubberColor || "#ffffff";
+
+  if (progress === lastProgressColor && scrubber === lastScrubberColor) return;
+
+  lastProgressColor = progress;
+  lastScrubberColor = scrubber;
+
+  const root = document.documentElement;
+
+  root.style.setProperty("--yt-progress-color", progress);
+  root.style.setProperty("--yt-scrubber-color", scrubber);
+
+  forceYouTubeRepaint();
+}
+
+/* =========================
+   INITIAL LOAD
+========================= */
+function init() {
+  chrome.storage.local.get(null, (settings) => {
+    applySettings(settings);
+  });
+}
+
+/* =========================
+   LIVE UPDATE FROM POPUP
+========================= */
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === "UPDATE_SETTINGS") {
+    applySettings(msg.settings || {});
+  }
+});
+
+/* =========================
+   SPA NAVIGATION HANDLER (YouTube/Pinterest/etc)
+========================= */
+let lastUrl = location.href;
+
+setInterval(() => {
+  if (location.href !== lastUrl) {
+    lastUrl = location.href;
+
+    chrome.storage.local.get(null, (settings) => {
+      applySettings(settings);
+    });
+  }
+}, 1000);
+
+/* =========================
+   INIT
+========================= */
+init();

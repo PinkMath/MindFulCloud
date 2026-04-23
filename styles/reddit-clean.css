@@ -1,0 +1,14 @@
+html.mindful-reddit.rd-minimal shreddit-post,
+html.mindful-reddit.rd-minimal div[data-testid="post-container"] {
+  opacity: 0.25;
+  transition: 0.3s;
+}
+
+html.mindful-reddit.rd-minimal shreddit-post:hover {
+  opacity: 1;
+}
+
+html.mindful-reddit.rd-minimal nav,
+html.mindful-reddit.rd-minimal aside {
+  display: none !important;
+}

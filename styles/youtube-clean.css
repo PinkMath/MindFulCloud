@@ -8,8 +8,8 @@ VARIABLES
   --text: #f0e4d6;
   --muted: #a89f94;
   --accent: #d4a373;
-  --yt-progress-color: #b1aaff; 
-  --yt-scrubber-color: #aaaaff;
+  --yt-progress-color: #4cafef; 
+  --yt-scrubber-color: #4cafef;
 }
 
 /* =======================
@@ -289,36 +289,19 @@ ytd-player-legacy-desktop-watch-ads-renderer {
 .ytp-play-progress.ytp-swatch-background-color,
 .ytp-play-progress {
   background: var(--yt-progress-color) !important;
-  background-color: var(--yt-progress-color) !important;
-  background-image: none !important; 
 }
 
 .ytp-scrubber-button.ytp-swatch-background-color,
 .ytp-scrubber-button {
   background: var(--yt-scrubber-color) !important;
-  background-color: var(--yt-scrubber-color) !important;
-  border: none !important;
   box-shadow: 0 0 5px var(--yt-scrubber-color) !important;
 }
 
-.ytp-progress-list {
-  background: rgba(255, 255, 255, 0.2) !important;
-}
-
-/* =======================
-RECOMMENDATIONS (REFINED)
-======================= */
-html.mindful-hide-rec #secondary,
-html.mindful-hide-rec #related {
+html.mindful-youtube.yt-hide-rec #related,
+html.mindful-youtube.yt-hide-rec #secondary {
   display: none !important;
-  visibility: hidden !important;
 }
 
-/* =======================
-COMMENTS (REFINED)
-======================= */
-html.mindful-hide-comments #comments,
-html.mindful-hide-comments ytd-comments,
-html.mindful-hide-comments #sections.ytd-comments {
+html.mindful-youtube.yt-hide-comments #comments {
   display: none !important;
 }

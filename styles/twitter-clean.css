@@ -1,0 +1,12 @@
+html.mindful-twitter.tw-focus [data-testid="primaryColumn"] {
+  filter: blur(6px);
+  transition: 0.3s;
+}
+
+html.mindful-twitter.tw-focus [data-testid="primaryColumn"]:hover {
+  filter: blur(0);
+}
+
+html.mindful-twitter.tw-focus [data-testid="sidebarColumn"] {
+  display: none !important;
+}

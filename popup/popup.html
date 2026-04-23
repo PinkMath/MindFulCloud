@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindfulCloud</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>☁️ MindfulCloud</h1>
+
+  <div class="section open">
+    <div class="section-header">General</div>
+    <div class="section-content">
+      <label class="row" for="enabled">
+        <span>Enable Extension</span>
+        <div class="switch">
+          <input type="checkbox" id="enabled">
+          <span class="slider"></span>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">YouTube</div>
+    <div class="section-content">
+      <label class="row" for="ytHideRec">
+        <span>Hide Recommendations</span>
+        <div class="switch">
+          <input type="checkbox" id="ytHideRec">
+          <span class="slider"></span>
+        </div>
+      </label>
+
+      <label class="row" for="ytHideComments">
+        <span>Hide Comments</span>
+        <div class="switch">
+          <input type="checkbox" id="ytHideComments">
+          <span class="slider"></span>
+        </div>
+      </label>
+
+      <div class="color-section">
+        <div class="row clickable-row" id="ytProgressRow">
+          <span>Progress Bar</span>
+          <div class="color-box" id="ytProgressColorBox"></div>
+        </div>
+        <div class="color-picker" id="ytProgressPicker">
+          <div data-color="#4cafef" style="background: #4cafef;"></div> 
+          <div data-color="#00ced1" style="background: #00ced1;"></div> 
+          <div data-color="#8a2be2" style="background: #8a2be2;"></div> 
+          <div data-color="#c3a6ff" style="background: #c3a6ff;"></div> 
+          <div data-color="#00ff88" style="background: #00ff88;"></div> 
+          <div data-color="#ff69b4" style="background: #ff69b4;"></div> 
+          <div data-color="#ff4757" style="background: #ff4757;"></div> 
+          <div data-color="#ffaa00" style="background: #ffaa00;"></div> 
+          <div data-color="#ffd700" style="background: #ffd700;"></div> 
+          <div data-color="#ffffff" style="background: #ffffff;"></div> 
+        </div>
+      </div>
+
+      <div class="color-section">
+        <div class="row clickable-row" id="ytScrubberRow">
+          <span>Scrubber (Circle)</span>
+          <div class="color-box" id="ytScrubberColorBox"></div>
+        </div>
+        <div class="color-picker" id="ytScrubberPicker">
+          <div data-color="#ffffff" style="background: #ffffff;"></div> 
+          <div data-color="#d1d1e0" style="background: #d1d1e0;"></div> 
+          <div data-color="#2c2c2c" style="background: #2c2c2c;"></div> 
+          <div data-color="#00f2ff" style="background: #00f2ff;"></div> 
+          <div data-color="#70ff00" style="background: #70ff00;"></div> 
+          <div data-color="#ff00ff" style="background: #ff00ff;"></div> 
+          <div data-color="#ff3e3e" style="background: #ff3e3e;"></div> 
+          <div data-color="#ffccaa" style="background: #ffccaa;"></div> 
+          <div data-color="#f0f8ff" style="background: #f0f8ff;"></div> 
+          <div data-color="#a0a0c0" style="background: #a0a0c0;"></div> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">Reddit</div>
+    <div class="section-content">
+      <label class="row" for="rdMinimal">
+        <span>Minimal Mode</span>
+        <div class="switch">
+          <input type="checkbox" id="rdMinimal">
+          <span class="slider"></span>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">Twitter / X</div>
+    <div class="section-content">
+      <label class="row" for="twFocus">
+        <span>Focus Mode</span>
+        <div class="switch">
+          <input type="checkbox" id="twFocus">
+          <span class="slider"></span>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">Pinterest</div>
+    <div class="section-content">
+      <label class="row" for="ptDark">
+        <span>Minimal Dark Mode</span>
+        <div class="switch">
+          <input type="checkbox" id="ptDark">
+          <span class="slider"></span>
+        </div>
+      </label>
+    </div>
+  </div>
+
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+/* =========================
+   GLOBAL BACKGROUND
+========================= */
+
+ body,
+ #__PWS_ROOT__ {
+  background-color: #0b0b0f !important;
+  color: #eaeaea !important;
+}
+
+/* =========================
+   REMOVE TOP BAR
+========================= */
+
+ header,
+ [role="banner"],
+ .zI7.iyn.Hsu,
+ .Jea,
+ .Rym,
+ .appUtilsContainer,
+ [data-test-id="header"] {
+  display: none !important;
+  height: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ALSO remove spacing it leaves behind */
+ #gradient,
+ .appContent {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* =========================
+   SIDEBAR (KEEP DARK)
+========================= */
+
+ nav,
+ aside,
+ [data-test-id="left-rail"] {
+  background-color: #0f0f16 !important;
+  color: #eaeaea !important;
+}
+
+/* =========================
+   ICON SAFETY (NO DISAPPEAR)
+========================= */
+
+ svg {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+ [class*="Icon"],
+ [style*="mask"] {
+  filter: invert(1) brightness(1.15) !important;
+}
+
+/* =========================
+   MODALS / OVERLAYS SAFE
+========================= */
+
+ div[role="dialog"],
+ .Sheet {
+  background-color: #12121a !important;
+  color: #eaeaea !important;
+}
+
+ .Scrim {
+  background-color: rgba(0,0,0,0.8) !important;
+}

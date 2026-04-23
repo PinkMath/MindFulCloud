@@ -1,0 +1,193 @@
+/* ===== 1. CORE LAYOUT ===== */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  background: #0c0f14;
+  color: #ffffff;
+  width: 270px;
+  overflow-x: hidden;
+}
+
+.container {
+  padding: 16px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.5px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* ===== 2. GLOBAL TRANSITIONS ===== */
+* {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== 3. SECTIONS & ACCORDION ===== */
+.section {
+  border-bottom: 1px solid #1c1f26;
+  margin-bottom: 4px;
+}
+
+.section-header {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 12px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.section-header:hover {
+  color: #ffffff;
+}
+
+.section-header::after {
+  content: "›";
+  transform: rotate(90deg);
+  font-size: 16px;
+  opacity: 0.4;
+}
+
+.section.open .section-header {
+  color: #4cafef; /* Highlight header when open */
+}
+
+.section.open .section-header::after {
+  transform: rotate(-90deg);
+}
+
+.section-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.section.open .section-content {
+  max-height: 600px;
+  opacity: 1;
+  transform: translateY(0);
+  padding-bottom: 12px;
+}
+
+/* ===== 4. ROWS & TOGGLES ===== */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.row:active {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* Custom Switch */
+.switch {
+  pointer-events: none;
+  position: relative;
+  width: 34px;
+  height: 18px;
+}
+
+.switch input {
+  display: none;
+  pointer-events: none; 
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #2a2f3a;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:checked + .slider {
+  background: #4cafef;
+  box-shadow: 0 0 10px rgba(76, 175, 239, 0.3);
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 12px;
+  width: 12px;
+  left: 3px;
+  bottom: 3px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+input:checked + .slider:before {
+  transform: translateX(16px);
+}
+
+/* ===== 5. COLOR PICKER SYSTEM ===== */
+.color-section {
+  margin-top: 12px;
+  padding: 8px 4px 4px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.color-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: #2a2f3a; /* Fallback */
+}
+
+.color-picker {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 2 rows of 5 */
+  gap: 8px;
+  margin-top: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.color-picker div {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.color-picker div:hover {
+  transform: scale(1.15) translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+/* ===== 6. ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
