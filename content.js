@@ -1,9 +1,8 @@
 const html = document.documentElement;
 
 /* =========================
-   STATE CACHE (PREVENT FLICKER)
+   CACHE (PREVENT UNNECESSARY WORK)
 ========================= */
-let lastSettings = {};
 let lastProgressColor = null;
 let lastScrubberColor = null;
 
@@ -11,9 +10,8 @@ let lastScrubberColor = null;
    APPLY SETTINGS
 ========================= */
 function applySettings(settings = {}) {
-  lastSettings = settings;
 
-  // reset only extension-related classes (NOT full reset)
+  // RESET CLASSES
   html.classList.remove(
     "mindful-youtube",
     "mindful-pinterest",
@@ -25,8 +23,6 @@ function applySettings(settings = {}) {
     "rd-minimal",
     "tw-focus"
   );
-
-  if (!settings.enabled) return;
 
   const host = location.hostname;
 
@@ -68,7 +64,7 @@ function applySettings(settings = {}) {
 }
 
 /* =========================
-   YOUTUBE COLORS (NO FLICKER)
+   YOUTUBE COLORS
 ========================= */
 function applyYouTubeColors(settings = {}) {
   const progress = settings.ytProgressColor || "#4cafef";
@@ -88,7 +84,21 @@ function applyYouTubeColors(settings = {}) {
 }
 
 /* =========================
-   INITIAL LOAD
+   FORCE UI UPDATE (FIX YT NOT REFRESHING CSS)
+========================= */
+function forceYouTubeRepaint() {
+  const player = document.querySelector("video");
+  if (!player) return;
+
+  player.style.transform = "translateZ(0)";
+
+  requestAnimationFrame(() => {
+    player.style.transform = "";
+  });
+}
+
+/* =========================
+   INIT
 ========================= */
 function init() {
   chrome.storage.local.get(null, (settings) => {
@@ -106,7 +116,7 @@ chrome.runtime.onMessage.addListener((msg) => {
 });
 
 /* =========================
-   SPA NAVIGATION HANDLER (YouTube/Pinterest/etc)
+   SPA NAVIGATION (YouTube etc)
 ========================= */
 let lastUrl = location.href;
 
@@ -120,7 +130,5 @@ setInterval(() => {
   }
 }, 1000);
 
-/* =========================
-   INIT
-========================= */
+// START
 init();

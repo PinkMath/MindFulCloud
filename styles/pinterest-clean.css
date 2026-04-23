@@ -1,72 +1,85 @@
-/* =========================
-   GLOBAL BACKGROUND
-========================= */
+/* =======================
+PINTEREST — DARK THEME
+======================= */
 
- body,
- #__PWS_ROOT__ {
-  background-color: #0b0b0f !important;
-  color: #eaeaea !important;
+html.mindful-pinterest.pt-dark {
+  --bg: #161514;
+  --panel: #1c1b1a;
+  --text: #f0e4d6;
+  --muted: #a89f94;
+  --border: #2a2927;
+
+  background: var(--bg) !important;
 }
 
-/* =========================
-   REMOVE TOP BAR
-========================= */
-
- header,
- [role="banner"],
- .zI7.iyn.Hsu,
- .Jea,
- .Rym,
- .appUtilsContainer,
- [data-test-id="header"] {
-  display: none !important;
-  height: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+/* =======================
+GLOBAL
+======================= */
+html.mindful-pinterest.pt-dark body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
 }
 
-/* ALSO remove spacing it leaves behind */
- #gradient,
- .appContent {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
+/* remove white backgrounds */
+html.mindful-pinterest.pt-dark div,
+html.mindful-pinterest.pt-dark section,
+html.mindful-pinterest.pt-dark main {
+  background-color: transparent !important;
 }
 
-/* =========================
-   SIDEBAR (KEEP DARK)
-========================= */
-
- nav,
- aside,
- [data-test-id="left-rail"] {
-  background-color: #0f0f16 !important;
-  color: #eaeaea !important;
+/* =======================
+HEADER
+======================= */
+html.mindful-pinterest.pt-dark header {
+  background: var(--bg) !important;
+  border-bottom: 1px solid var(--border) !important;
 }
 
-/* =========================
-   ICON SAFETY (NO DISAPPEAR)
-========================= */
-
- svg {
-  fill: currentColor !important;
-  stroke: currentColor !important;
+/* =======================
+PINS
+======================= */
+html.mindful-pinterest.pt-dark div[data-test-id="pin"] {
+  background: var(--panel) !important;
+  border-radius: 10px !important;
 }
 
- [class*="Icon"],
- [style*="mask"] {
-  filter: invert(1) brightness(1.15) !important;
+/* =======================
+TEXT
+======================= */
+html.mindful-pinterest.pt-dark h1,
+html.mindful-pinterest.pt-dark h2,
+html.mindful-pinterest.pt-dark h3,
+html.mindful-pinterest.pt-dark span {
+  color: var(--text) !important;
 }
 
-/* =========================
-   MODALS / OVERLAYS SAFE
-========================= */
-
- div[role="dialog"],
- .Sheet {
-  background-color: #12121a !important;
-  color: #eaeaea !important;
+html.mindful-pinterest.pt-dark p {
+  color: var(--muted) !important;
 }
 
- .Scrim {
-  background-color: rgba(0,0,0,0.8) !important;
+/* =======================
+INPUTS
+======================= */
+html.mindful-pinterest.pt-dark input {
+  background: var(--panel) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* =======================
+NAV
+======================= */
+html.mindful-pinterest.pt-dark nav {
+  background: var(--bg) !important;
+}
+
+/* =======================
+SCROLLBAR
+======================= */
+html.mindful-pinterest.pt-dark ::-webkit-scrollbar {
+  width: 8px;
+}
+
+html.mindful-pinterest.pt-dark ::-webkit-scrollbar-thumb {
+  background: var(--border);
 }

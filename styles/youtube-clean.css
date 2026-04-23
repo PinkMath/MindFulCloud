@@ -39,6 +39,10 @@ ytd-watch-flexy {
   margin-top: 67px !important;
 }
 
+ytd-watch-flexy[fullscreen] {
+  margin-top: 0px !important;
+}
+
 ytd-watch-flexy[flexy] #primary {
   max-width: 1000px;
   margin: 0 auto;
@@ -47,6 +51,10 @@ ytd-watch-flexy[flexy] #primary {
 /* =======================
 LAYOUT CLEANUP
 ======================= */
+
+#flexible > ytd-menu-renderer:first-child {
+  display: none !important;
+}
 
 .ytd-app,
 #content,

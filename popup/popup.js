@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ELEMENTS
   // =========================
   const elements = {
-    enabled: document.getElementById("enabled"),
     ytHideRec: document.getElementById("ytHideRec"),
     ytHideComments: document.getElementById("ytHideComments"),
     rdMinimal: document.getElementById("rdMinimal"),
@@ -38,22 +37,16 @@ document.addEventListener("DOMContentLoaded", () => {
     api.storage.local.get(null).then(data => {
       console.log("LOADED:", data);
 
-      // switches
       Object.entries(elements).forEach(([key, el]) => {
         if (!el) return;
         el.checked = data[key] ?? false;
       });
 
-      // colors
-      if (data.ytProgressColor) {
-        ytProgressColor = data.ytProgressColor;
-        progressBox.style.background = ytProgressColor;
-      }
+      ytProgressColor = data.ytProgressColor || ytProgressColor;
+      ytScrubberColor = data.ytScrubberColor || ytScrubberColor;
 
-      if (data.ytScrubberColor) {
-        ytScrubberColor = data.ytScrubberColor;
-        scrubberBox.style.background = ytScrubberColor;
-      }
+      if (progressBox) progressBox.style.background = ytProgressColor;
+      if (scrubberBox) scrubberBox.style.background = ytScrubberColor;
     });
   }
 
@@ -63,38 +56,32 @@ document.addEventListener("DOMContentLoaded", () => {
   function saveSettings() {
     const settings = {};
 
-    // switches
     Object.entries(elements).forEach(([key, el]) => {
       if (!el) return;
       settings[key] = el.checked;
     });
 
-    // colors
     settings.ytProgressColor = ytProgressColor;
     settings.ytScrubberColor = ytScrubberColor;
 
     console.log("SAVING:", settings);
 
-    if (api?.storage) {
-      api.storage.local.set(settings);
-    }
+    api?.storage?.local.set(settings);
 
-    // live update
-    if (api?.tabs) {
-      api.tabs.query({ active: true, currentWindow: true })
-        .then(tabs => {
-          if (!tabs[0]?.id) return;
+    // 🔥 ALWAYS push update to page
+    api?.tabs?.query({ active: true, currentWindow: true })
+      .then(tabs => {
+        if (!tabs[0]?.id) return;
 
-          api.tabs.sendMessage(tabs[0].id, {
-            type: "UPDATE_SETTINGS",
-            settings
-          }).catch(() => {});
-        });
-    }
+        api.tabs.sendMessage(tabs[0].id, {
+          type: "UPDATE_SETTINGS",
+          settings
+        }).catch(() => {});
+      });
   }
 
   // =========================
-  // SWITCH LISTENERS
+  // SWITCHES
   // =========================
   Object.values(elements).forEach(el => {
     if (!el) return;
@@ -102,12 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // =========================
-  // COLOR PICKER LOGIC
+  // COLOR PICKERS
   // =========================
   function setupPicker(box, picker, setColor) {
     if (!box || !picker) return;
 
-    // toggle
     box.addEventListener("click", () => {
       const open = picker.style.display === "grid";
 
@@ -117,7 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!open) picker.style.display = "grid";
     });
 
-    // options
     picker.querySelectorAll("div").forEach(el => {
       const color = el.dataset.color;
       el.style.background = color;
@@ -126,13 +111,13 @@ document.addEventListener("DOMContentLoaded", () => {
         setColor(color);
         box.style.background = color;
         picker.style.display = "none";
-        saveSettings();
+        saveSettings(); // 🔥 triggers live update
       });
     });
   }
 
-  setupPicker(progressBox, progressPicker, (c) => ytProgressColor = c);
-  setupPicker(scrubberBox, scrubberPicker, (c) => ytScrubberColor = c);
+  setupPicker(progressBox, progressPicker, c => ytProgressColor = c);
+  setupPicker(scrubberBox, scrubberPicker, c => ytScrubberColor = c);
 
   // =========================
   // ACCORDION
@@ -150,9 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // =========================
   // INIT
-  // =========================
   loadSettings();
-
 });
