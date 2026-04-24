@@ -18,6 +18,7 @@ function applySettings(settings = {}) {
     "mindful-reddit",
     "mindful-twitter",
     "yt-hide-rec",
+    "yt-float-menu",
     "yt-hide-comments",
     "pt-dark",
     "rd-minimal",
@@ -33,6 +34,7 @@ function applySettings(settings = {}) {
     html.classList.add("mindful-youtube");
 
     if (settings.ytHideRec) html.classList.add("yt-hide-rec");
+    if (settings.ytHamburger) html.classList.add("yt-float-menu");
     if (settings.ytHideComments) html.classList.add("yt-hide-comments");
 
     applyYouTubeColors(settings);

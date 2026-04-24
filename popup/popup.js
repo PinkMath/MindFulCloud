@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     rdMinimal: document.getElementById("rdMinimal"),
     twFocus: document.getElementById("twFocus"),
     ptDark: document.getElementById("ptDark"),
+    ytHamburger: document.getElementById("ytHamburger"),
   };
 
   // ===== COLOR UI =====
@@ -49,6 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (scrubberBox) scrubberBox.style.background = ytScrubberColor;
     });
   }
+
+  // CLOSE ALL SECTIONS ON LOAD
+  document.querySelectorAll(".section")
+    .forEach(s => s.classList.remove("open"));
 
   // =========================
   // SAVE SETTINGS
@@ -111,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setColor(color);
         box.style.background = color;
         picker.style.display = "none";
-        saveSettings(); // 🔥 triggers live update
+        saveSettings();
       });
     });
   }

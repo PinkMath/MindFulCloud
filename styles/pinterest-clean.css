@@ -63,7 +63,8 @@ INPUTS
 html.mindful-pinterest.pt-dark input {
   background: var(--panel) !important;
   color: var(--text) !important;
-  border: 1px solid var(--border) !important;
+  padding: 0 10px 10px 0;
+  border: 2px solid var(--border) !important;
 }
 
 /* =======================

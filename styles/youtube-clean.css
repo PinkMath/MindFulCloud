@@ -10,6 +10,9 @@ VARIABLES
   --accent: #d4a373;
   --yt-progress-color: #4cafef; 
   --yt-scrubber-color: #4cafef;
+  --mf-gap: 10px;
+  --mf-radius: 12px;
+  --mf-header-height: 52px;
 }
 
 /* =======================
@@ -36,7 +39,7 @@ WATCH PAGE
 ======================= */
 
 ytd-watch-flexy {
-  margin-top: 67px !important;
+  margin-top: 70px !important;
 }
 
 ytd-watch-flexy[fullscreen] {
@@ -63,14 +66,109 @@ LAYOUT CLEANUP
   max-width: none !important;
 }
 
+
 /* =======================
-SIDEBAR
+SIDEBAR (FINAL CLEAN VERSION)
 ======================= */
 
-#guide,
-.ytd-mini-guide-renderer,
-#guide-button {
+#contentContainer{
+  padding: 0 !important;
+}
+
+#guide-content #sections ytd-guide-section-renderer:nth-child(1),
+#guide-content #footer,
+#scrim.visible.tp-yt-app-drawer,
+#guide-content #header {
   display: none !important;
+  opacity: 0 !important;
+}
+
+#guide-button,
+.ytd-mini-guide-renderer {
+  display: none !important;
+}
+
+html.yt-float-menu #guide-button {
+  display: block !important;
+}
+
+/* =======================
+DRAWER (POSITION + ANIMATION)
+======================= */
+html.yt-float-menu tp-yt-app-drawer {
+  position: fixed !important;
+
+  top: calc(var(--mf-gap) + var(--mf-header-height) + var(--mf-gap)) !important;
+  left: var(--mf-gap) !important;
+
+  width: 240px !important;
+  height: auto !important;
+
+  z-index: 10000 !important;
+
+  background: transparent !important;
+
+  /* animation */
+  transform: scale(0.96);
+  opacity: 0;
+  transform-origin: top left;
+
+  pointer-events: none;
+
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.15s ease;
+}
+
+/* OPEN STATE */
+html.yt-float-menu tp-yt-app-drawer[opened] {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+html.yt-float-menu #contentContainer {
+  width: 100% !important;
+  max-height: calc(100vh - 100px) !important;
+
+  /* same as header */
+  background: rgba(22, 21, 20, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  border-radius: var(--mf-radius) !important;
+
+  padding: 8px 0 0 10px !important;
+
+  box-shadow: none !important;
+}
+
+html.yt-float-menu #guide-content,
+html.yt-float-menu ytd-guide-renderer {
+  background: transparent !important;
+}
+
+/* sections spacing */
+html.yt-float-menu ytd-guide-section-renderer {
+  margin: 6px 0 !important;
+  padding: 0 6px !important;
+}
+
+/* items */
+html.yt-float-menu ytd-guide-entry-renderer {
+  border-radius: 6px !important;
+  margin: 2px 6px !important;
+}
+
+html.yt-float-menu ytd-guide-entry-renderer:hover {
+  background: rgba(255,255,255,0.06) !important;
+}
+
+/* section titles */
+html.yt-float-menu #header.ytd-guide-section-renderer {
+  font-size: 12px !important;
+  color: rgba(255,255,255,0.6) !important;
+  padding: 6px 12px !important;
 }
 
 /* =======================
@@ -87,19 +185,20 @@ ytd-masthead {
 
 #masthead-container {
   position: fixed !important;
-  top: 4px !important;
-  left: 10px !important;
-  width: calc(100% - 20px) !important;
+
+  top: var(--mf-gap) !important;
+  left: var(--mf-gap) !important;
+  width: calc(100% - (var(--mf-gap) * 2)) !important;
+
   min-height: 48px !important;
-  height: auto !important;
 
   background: rgba(22, 21, 20, 0.85) !important;
   backdrop-filter: blur(12px) !important;
 
   border: 1px solid rgba(255, 255, 255, 0.05) !important;
-  border-radius: 12px !important;
+  border-radius: var(--mf-radius) !important;
 
-  z-index: 9999 !important;
+  z-index: 10000 !important;
 }
 
 #center {
@@ -109,7 +208,7 @@ ytd-masthead {
 
 /* =======================
 GRID
-======================= */
+====================== */
 
 ytd-rich-grid-renderer {
   max-width: 100% !important;
@@ -154,7 +253,7 @@ ytd-rich-item-renderer:has(a[href*="/shorts/"]) {
 
 /* =======================
 CONTENT CLEANUP
-======================= */
+================== */
 
 .ytd-merch-shelf-renderer {
   display: none !important;
