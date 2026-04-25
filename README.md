@@ -82,7 +82,7 @@ MindfulCloud/
 
 ## ⚙️ Installation
 
-1. Click [here](https://addons.mozilla.org/en-US/firefox/mindfulcloud/)
+1. Click [here](https://addons.mozilla.org/en-US/firefox/addon/mindfulcloud/)
 
 2. Download it and enjoy!
 
