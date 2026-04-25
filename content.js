@@ -15,6 +15,16 @@ let current = {};
 /* =========================
    APPLY STATE
 ========================= */
+function applyYouTubeColors(settings = {}) {
+  const progress = settings.ytProgressColor || "#4cafef";
+  const scrubber = settings.ytScrubberColor || "#ffffff";
+
+  const root = document.documentElement;
+
+  root.style.setProperty("--yt-progress-color", progress);
+  root.style.setProperty("--yt-scrubber-color", scrubber);
+}
+
 function apply(settings = {}) {
   current = settings;
 
@@ -39,6 +49,8 @@ function apply(settings = {}) {
     if (settings.ytHideRec) html.classList.add("yt-hide-rec");
     if (settings.ytHamburger) html.classList.add("yt-float-menu");
     if (settings.ytHideComments) html.classList.add("yt-hide-comments");
+
+    applyYouTubeColors(settings);
   }
 
   if (host.includes("pinterest.com") && settings.ptDark) {
