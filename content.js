@@ -1,17 +1,23 @@
 const html = document.documentElement;
 
-/* =========================
-   CACHE (PREVENT UNNECESSARY WORK)
-========================= */
-let lastProgressColor = null;
-let lastScrubberColor = null;
+const storage =
+  typeof browser !== "undefined"
+    ? browser.storage.local
+    : chrome.storage.local;
+
+const runtime =
+  typeof browser !== "undefined"
+    ? browser.runtime
+    : chrome.runtime;
+
+let current = {};
 
 /* =========================
-   APPLY SETTINGS
+   APPLY STATE
 ========================= */
-function applySettings(settings = {}) {
+function apply(settings = {}) {
+  current = settings;
 
-  // RESET CLASSES
   html.classList.remove(
     "mindful-youtube",
     "mindful-pinterest",
@@ -27,110 +33,89 @@ function applySettings(settings = {}) {
 
   const host = location.hostname;
 
-  /* =========================
-     YOUTUBE
-  ========================= */
   if (host.includes("youtube.com")) {
     html.classList.add("mindful-youtube");
 
     if (settings.ytHideRec) html.classList.add("yt-hide-rec");
     if (settings.ytHamburger) html.classList.add("yt-float-menu");
     if (settings.ytHideComments) html.classList.add("yt-hide-comments");
-
-    applyYouTubeColors(settings);
   }
 
-  /* =========================
-     PINTEREST
-  ========================= */
-  if (host.includes("pinterest.com")) {
-    html.classList.add("mindful-pinterest");
-    if (settings.ptDark) html.classList.add("pt-dark");
+  if (host.includes("pinterest.com") && settings.ptDark) {
+    html.classList.add("pt-dark");
   }
 
-  /* =========================
-     REDDIT
-  ========================= */
-  if (host.includes("reddit.com")) {
-    html.classList.add("mindful-reddit");
-    if (settings.rdMinimal) html.classList.add("rd-minimal");
+  if (host.includes("reddit.com") && settings.rdMinimal) {
+    html.classList.add("rd-minimal");
   }
 
-  /* =========================
-     TWITTER / X
-  ========================= */
-  if (host.includes("twitter.com") || host.includes("x.com")) {
-    html.classList.add("mindful-twitter");
-    if (settings.twFocus) html.classList.add("tw-focus");
+  if ((host.includes("x.com") || host.includes("twitter.com")) && settings.twFocus) {
+    html.classList.add("tw-focus");
   }
 }
 
 /* =========================
-   YOUTUBE COLORS
+   SAFE FIREFOX STORAGE LOAD
 ========================= */
-function applyYouTubeColors(settings = {}) {
-  const progress = settings.ytProgressColor || "#4cafef";
-  const scrubber = settings.ytScrubberColor || "#ffffff";
-
-  if (progress === lastProgressColor && scrubber === lastScrubberColor) return;
-
-  lastProgressColor = progress;
-  lastScrubberColor = scrubber;
-
-  const root = document.documentElement;
-
-  root.style.setProperty("--yt-progress-color", progress);
-  root.style.setProperty("--yt-scrubber-color", scrubber);
-
-  forceYouTubeRepaint();
+async function loadSettings() {
+  try {
+    const data = await storage.get();
+    return data || {};
+  } catch (e) {
+    console.error("Storage error:", e);
+    return {};
+  }
 }
 
 /* =========================
-   FORCE UI UPDATE (FIX YT NOT REFRESHING CSS)
+   INIT (IMPORTANT FIX)
 ========================= */
-function forceYouTubeRepaint() {
-  const player = document.querySelector("video");
-  if (!player) return;
+async function init() {
+  const settings = await loadSettings();
 
-  player.style.transform = "translateZ(0)";
-
+  // small delay fixes Firefox race condition on reload
   requestAnimationFrame(() => {
-    player.style.transform = "";
+    apply(settings);
   });
 }
 
 /* =========================
-   INIT
+   LISTEN POPUP CHANGES
 ========================= */
-function init() {
-  chrome.storage.local.get(null, (settings) => {
-    applySettings(settings);
-  });
-}
-
-/* =========================
-   LIVE UPDATE FROM POPUP
-========================= */
-chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.type === "UPDATE_SETTINGS") {
-    applySettings(msg.settings || {});
+runtime.onMessage.addListener((msg) => {
+  if (msg?.type === "UPDATE_SETTINGS") {
+    apply(msg.settings || {});
   }
 });
 
 /* =========================
-   SPA NAVIGATION (YouTube etc)
+   FIX: FIREFOX SPA NAVIGATION
 ========================= */
-let lastUrl = location.href;
+function watchUrl() {
+  let last = location.href;
 
-setInterval(() => {
-  if (location.href !== lastUrl) {
-    lastUrl = location.href;
+  const obs = new MutationObserver(() => {
+    if (location.href !== last) {
+      last = location.href;
+      init();
+    }
+  });
 
-    chrome.storage.local.get(null, (settings) => {
-      applySettings(settings);
-    });
-  }
-}, 1000);
+  obs.observe(document, {
+    subtree: true,
+    childList: true
+  });
+}
 
-// START
-init();
+/* =========================
+   FIREFOX SAFE INIT DELAY
+========================= */
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
+window.addEventListener("load", init);
+
+watchUrl();

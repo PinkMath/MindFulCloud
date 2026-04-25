@@ -1,9 +1,11 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
   const api =
     typeof browser !== "undefined" ? browser :
     typeof chrome !== "undefined" ? chrome :
     null;
+
+  if (!api) return;
 
   console.log("POPUP READY");
 
@@ -19,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ytHamburger: document.getElementById("ytHamburger"),
   };
 
-  // ===== COLOR UI =====
   const progressBox = document.getElementById("ytProgressColorBox");
   const progressPicker = document.getElementById("ytProgressPicker");
 
@@ -30,35 +31,44 @@ document.addEventListener("DOMContentLoaded", () => {
   let ytScrubberColor = "#ffffff";
 
   // =========================
+  // STORAGE HELPERS (UNIFIED)
+  // =========================
+  const storage = {
+    get: () =>
+      new Promise(resolve => {
+        api.storage.local.get(null, data => resolve(data || {}));
+      }),
+
+    set: (data) =>
+      new Promise(resolve => {
+        api.storage.local.set(data, resolve);
+      })
+  };
+
+  // =========================
   // LOAD SETTINGS
   // =========================
-  function loadSettings() {
-    if (!api?.storage) return;
+  async function loadSettings() {
+    const data = await storage.get();
 
-    api.storage.local.get(null).then(data => {
-      console.log("LOADED:", data);
+    console.log("LOADED:", data);
 
-      Object.entries(elements).forEach(([key, el]) => {
-        if (!el) return;
-        el.checked = data[key] ?? false;
-      });
-
-      ytProgressColor = data.ytProgressColor || ytProgressColor;
-      ytScrubberColor = data.ytScrubberColor || ytScrubberColor;
-
-      if (progressBox) progressBox.style.background = ytProgressColor;
-      if (scrubberBox) scrubberBox.style.background = ytScrubberColor;
+    Object.entries(elements).forEach(([key, el]) => {
+      if (!el) return;
+      el.checked = data[key] ?? false;
     });
-  }
 
-  // CLOSE ALL SECTIONS ON LOAD
-  document.querySelectorAll(".section")
-    .forEach(s => s.classList.remove("open"));
+    ytProgressColor = data.ytProgressColor || ytProgressColor;
+    ytScrubberColor = data.ytScrubberColor || ytScrubberColor;
+
+    if (progressBox) progressBox.style.background = ytProgressColor;
+    if (scrubberBox) scrubberBox.style.background = ytScrubberColor;
+  }
 
   // =========================
   // SAVE SETTINGS
   // =========================
-  function saveSettings() {
+  async function saveSettings() {
     const settings = {};
 
     Object.entries(elements).forEach(([key, el]) => {
@@ -71,18 +81,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("SAVING:", settings);
 
-    api?.storage?.local.set(settings);
+    await storage.set(settings);
 
-    // 🔥 ALWAYS push update to page
-    api?.tabs?.query({ active: true, currentWindow: true })
-      .then(tabs => {
-        if (!tabs[0]?.id) return;
+    // 🔥 push update to active tab
+    api.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (!tabs[0]?.id) return;
 
-        api.tabs.sendMessage(tabs[0].id, {
-          type: "UPDATE_SETTINGS",
-          settings
-        }).catch(() => {});
-      });
+      api.tabs.sendMessage(tabs[0].id, {
+        type: "UPDATE_SETTINGS",
+        settings
+      }, () => {});
+    });
   }
 
   // =========================
@@ -140,6 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // =========================
   // INIT
-  loadSettings();
+  // =========================
+  await loadSettings();
 });

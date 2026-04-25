@@ -4,13 +4,14 @@
   "version": "3.0",
   "description": "De-clutter your digital space across multiple platforms.",
 
-  "permissions": ["storage"],
+  "permissions": ["storage", "tabs"],
 
   "host_permissions": [
     "*://*.youtube.com/*",
     "*://*.reddit.com/*",
     "*://*.twitter.com/*",
-    "*://*.x.com/*"
+    "*://*.x.com/*",
+    "*://*.pinterest.com/*"
   ],
 
   "action": {
@@ -25,34 +26,27 @@
 
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.reddit.com/*",
+        "*://*.twitter.com/*",
+        "*://*.x.com/*",
+        "*://*.pinterest.com/*"
+      ],
       "js": ["content.js"],
-      "css": ["styles/youtube-clean.css"],
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.reddit.com/*"],
-      "js": ["content.js"],
-      "css": ["styles/reddit-clean.css"],
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.twitter.com/*", "*://*.x.com/*"],
-      "js": ["content.js"],
-      "css": ["styles/twitter-clean.css"],
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.pinterest.com/*"],
-      "js": ["content.js"],
-      "css": ["styles/pinterest-clean.css"],
+      "css": [
+        "styles/youtube-clean.css",
+        "styles/reddit-clean.css",
+        "styles/twitter-clean.css",
+        "styles/pinterest-clean.css"
+      ],
       "run_at": "document_start"
     }
   ],
 
   "browser_specific_settings": {
     "gecko": {
-      "id": "mindful-new-v2@yourextension.com"
+      "id": "mindfulcloud@pinkmath.com"
     }
   }
 }
