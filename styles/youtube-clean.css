@@ -10,7 +10,7 @@ VARIABLES
   --accent: #d4a373;
   --yt-progress-color: #4cafef; 
   --yt-scrubber-color: #4cafef;
-  --mf-gap: 10px;
+  --mf-gap: 6px;
   --mf-radius: 12px;
   --mf-header-height: 52px;
 }
@@ -38,6 +38,58 @@ body {
 WATCH PAGE
 ======================= */
 
+/* main channel header wrapper */
+ytd-browse[page-subtype="channels"] #header,
+ytd-browse[page-subtype="channels"] #tabs-container,
+ytd-browse[page-subtype="channels"] yt-tab-group-shape {
+  position: static !important;
+  top: auto !important;
+}
+
+/* remove 2-column layout constraint */
+ytd-two-column-browse-results-renderer[page-subtype="channels"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* make primary fill everything */
+ytd-browse[page-subtype="channels"] #primary {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 24px !important; /* keep some side breathing */
+}
+
+/* sometimes YouTube uses this */
+ytd-browse[page-subtype="channels"] #page-header {
+  position: static !important;
+}
+
+/* extra safety (new layouts) */
+ytd-page-header-renderer,
+ytd-c4-tabbed-header-renderer {
+  position: static !important;
+  top: auto !important;
+}
+
+ytd-browse[page-subtype="channels"] #contentContainer {
+  padding-top: 0 !important;
+}
+
+ytd-browse[page-subtype="channels"] ytd-rich-grid-renderer,
+ytd-browse[page-subtype="channels"] {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.ytSpecButtonViewModelHost.you-chat-entrypoint-button,
+#flexible-item-buttons yt-button-view-model:nth-child(1),
+yt-tab-group-shape yt-tab-shape:nth-child(3) {
+  display: none !important;
+}
+
 ytd-watch-flexy {
   margin-top: 70px !important;
 }
@@ -55,6 +107,26 @@ ytd-watch-flexy[flexy] #primary {
 LAYOUT CLEANUP
 ======================= */
 
+#i1 {
+  background: rgba(22, 21, 20, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  border-radius: 12px !important;
+}
+
+ytd-popup-container tp-yt-paper-dialog,
+ytd-notification-renderer,
+ytd-multi-page-menu-renderer,
+tp-yt-paper-listbox {
+  background: rgba(22, 21, 20, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  border-radius: 12px !important;
+
+  box-shadow: none !important;
+}
+
 #flexible > ytd-menu-renderer:first-child {
   display: none !important;
 }
@@ -71,8 +143,14 @@ LAYOUT CLEANUP
 SIDEBAR (FINAL CLEAN VERSION)
 ======================= */
 
-#contentContainer{
-  padding: 0 !important;
+html:not(.yt-float-menu) #contentContainer {
+  max-height: none !important;
+}
+
+html:not(.yt-float-menu) tp-yt-app-drawer {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateX(-100%) !important;
 }
 
 #guide-content #sections ytd-guide-section-renderer:nth-child(1),
@@ -97,8 +175,9 @@ DRAWER (POSITION + ANIMATION)
 ======================= */
 html.yt-float-menu tp-yt-app-drawer {
   position: fixed !important;
+  display: block !important;
 
-  top: calc(var(--mf-gap) + var(--mf-header-height) + var(--mf-gap)) !important;
+  top: calc(var(--mf-gap) + var(--mf-header-height) + var(--mf-gap) + 15px) !important;
   left: var(--mf-gap) !important;
 
   width: 240px !important;
@@ -116,8 +195,8 @@ html.yt-float-menu tp-yt-app-drawer {
   pointer-events: none;
 
   transition:
-    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.15s ease;
+  transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+  opacity 0.15s ease;
 }
 
 /* OPEN STATE */
@@ -127,7 +206,7 @@ html.yt-float-menu tp-yt-app-drawer[opened] {
   pointer-events: auto;
 }
 
-html.yt-float-menu #contentContainer {
+html.yt-float-menu tp-yt-app-drawer #contentContainer {
   width: 100% !important;
   max-height: calc(100vh - 100px) !important;
 
@@ -218,9 +297,29 @@ ytd-rich-grid-renderer {
 
 #contents.ytd-rich-grid-renderer {
   display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   gap: 24px !important;
-  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* default → 3 columns */
+@media (min-width: 0px) {
+  #contents.ytd-rich-grid-renderer {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* medium → 4 columns */
+@media (min-width: 1100px) {
+  #contents.ytd-rich-grid-renderer {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* large → 5 columns */
+@media (min-width: 1600px) {
+  #contents.ytd-rich-grid-renderer {
+    grid-template-columns: repeat(5, 1fr) !important;
+  }
 }
 
 ytd-rich-item-renderer {
